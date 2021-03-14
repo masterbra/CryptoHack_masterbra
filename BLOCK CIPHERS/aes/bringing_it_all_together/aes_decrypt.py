@@ -7,10 +7,10 @@ ciphertext = b'\xd1O\x14j\xa4+O\xb6\xa1\xc4\x08B)\x8f\x12\xdd'
 
 def expand_key(master_key):
     """
-    Expands and returns a list of key matrices for the given master_key.
+    Expande y devuelve una lista de matrices clave para la clave maestra dada.
     """
 
-    # Round constants https://en.wikipedia.org/wiki/AES_key_schedule#Round_constants
+    # Constantes redondas https://en.wikipedia.org/wiki/AES_key_schedule#Round_constants
     r_con = (
         0x00, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40,
         0x80, 0x1B, 0x36, 0x6C, 0xD8, 0xAB, 0x4D, 0x9A,
@@ -18,54 +18,54 @@ def expand_key(master_key):
         0xD4, 0xB3, 0x7D, 0xFA, 0xEF, 0xC5, 0x91, 0x39,
     )
 
-    # Initialize round keys with raw key material.
+    # Inicializar claves redondas con material de clave en bruto.
     key_columns = bytes2matrix(master_key)
     iteration_size = len(master_key) // 4
 
-    # Each iteration has exactly as many columns as the key material.
+    # Cada iteración tiene exactamente tantas columnas como el material clave.
     columns_per_iteration = len(key_columns)
     i = 1
     while len(key_columns) < (N_ROUNDS + 1) * 4:
-        # Copy previous word.
+        # copiar la palabra anterior.
         word = list(key_columns[-1])
 
-        # Perform schedule_core once every "row".
+        # Realice schedule_core una vez en cada "fila-->row".
         if len(key_columns) % iteration_size == 0:
-            # Circular shift.
+            # Desplazamiento circular.
             word.append(word.pop(0))
-            # Map to S-BOX.
+            #Mapa de S-BOX.
             word = [s_box[b] for b in word]
-            # XOR with first byte of R-CON, since the others bytes of R-CON are 0.
+            # XOR con el primer byte de R-CON, ya que los otros bytes de R-CON son 0.
             word[0] ^= r_con[i]
             i += 1
         elif len(master_key) == 32 and len(key_columns) % iteration_size == 4:
-            # Run word through S-box in the fourth iteration when using a
-            # 256-bit key.
+            # Ejecute word a través de S-box en la cuarta iteración cuando utilice una
+            # clave de 256-bit.
             word = [s_box[b] for b in word]
 
-        # XOR with equivalent word from previous iteration.
+        # XOR con palabra equivalente de iteración anterior.
         word = bytes(i^j for i, j in zip(word, key_columns[-iteration_size]))
         key_columns.append(word)
 
-    # Group key words in 4x4 byte matrices.
+    # Agrupe las palabras clave en matrices de 4x4 bytes.
     return [key_columns[4*i : 4*(i+1)] for i in range(len(key_columns) // 4)]
 
 
 def decrypt(key, ciphertext):
-    round_keys = expand_key(key) # Remember to start from the last round key and work backwards through them when decrypting
+    round_keys = expand_key(key) # recuerdea comenzar desde la última clave de ronda y trabajar hacia atrás a través de ellos al descifrar
 
-    # Convert ciphertext to state matrix
+    # Convertir texto cifrado en matriz de estado
 
-    # Initial add round key step
+    # Paso clave inicial para agregar ronda
 
     for i in range(N_ROUNDS - 1, 0, -1):
-        pass # Do round
+        pass # Hacer ronda
+    
+# Ejecutar la ronda final (omite el paso InvMixColumns)
 
-    # Run final round (skips the InvMixColumns step)
-
-    # Convert state matrix to plaintext
+    # Convertir matriz de estado en texto plano
 
     return plaintext
 
 
-# print(decrypt(key, ciphertext))
+print(decrypt(key, ciphertext))

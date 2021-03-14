@@ -5,15 +5,13 @@ def shift_rows(s):
 
 
 def inv_shift_rows(s):
-    ???
 
 
-# learned from http://cs.ucsb.edu/~koc/cs178/projects/JT/aes.c
+# http://cs.ucsb.edu/~koc/cs178/projects/JT/aes.c
 xtime = lambda a: (((a << 1) ^ 0x1B) & 0xFF) if (a & 0x80) else (a << 1)
 
 
 def mix_single_column(a):
-    # see Sec 4.1.2 in The Design of Rijndael
     t = a[0] ^ a[1] ^ a[2] ^ a[3]
     u = a[0]
     a[0] ^= t ^ xtime(a[0] ^ a[1])
@@ -28,7 +26,6 @@ def mix_columns(s):
 
 
 def inv_mix_columns(s):
-    # see Sec 4.1.3 in The Design of Rijndael
     for i in range(4):
         u = xtime(xtime(s[i][0] ^ s[i][2]))
         v = xtime(xtime(s[i][1] ^ s[i][3]))

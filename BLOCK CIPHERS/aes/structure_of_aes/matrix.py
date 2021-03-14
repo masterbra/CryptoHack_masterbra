@@ -1,12 +1,12 @@
 def bytes2matrix(text):
-    """ Converts a 16-byte array into a 4x4 matrix.  """
+    """ Convierte una matriz de 16 bytes en una matriz de 4x4. """
     return [list(text[i:i+4]) for i in range(0, len(text), 4)]
 
 def matrix2bytes(matrix):
-    """ Converts a 4x4 matrix into a 16-byte array.  """
+    """ Convierte una matriz de 4x4 en una matriz de 16 bytes. """
     arr = []
 
-    # O(n^2) traverse through the 4x4 matrix and construct the array.
+    # O(n^2) atraviesa la matriz 4x4 y construye la matriz.
     for i in range(0, len(matrix)):
         m = matrix[i]
         for j in range(0, len(m)):
@@ -14,7 +14,7 @@ def matrix2bytes(matrix):
     return arr
 
 def pro_matrix2bytes(matrix):
-    """ Converts a 4x4 matrix into a 16-byte array. (Robin Jadoul) """
+    """ Convierte una matriz de 4x4 en una matriz de 16 bytes. (Robin Jadoul) """
     return bytes(sum(matrix, []))
 
 matrix = [
@@ -24,13 +24,13 @@ matrix = [
     [114, 105, 120, 125],
 ]
 
-# Testing out the nature of the function
+# Probando la naturaleza de la función
 print(bytes2matrix([1, 2, 3, 4, 5, 6, 7, 8]))
 
-# Retrieve flag with own implementation
+# Recuperar bandera con implementación propia
 flag = matrix2bytes(matrix)
 print("".join([chr(f) for f in flag]))
 
-# Retrieve flag with pro implementation
+# Recuperar bandera con implementación pro
 flag = pro_matrix2bytes(matrix)
 print(flag.decode("utf-8"))

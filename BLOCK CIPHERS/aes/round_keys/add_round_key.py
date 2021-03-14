@@ -14,11 +14,11 @@ round_key = [
 
 
 def add_round_key(state, round_key):
-    """ XORs round key matrix with state matrix """
+    """ Matriz de teclas redondas XOR con matriz de estado """
     arr = []
 
     if len(state) != len(round_key):
-        raise Exception("Not the same length")
+        raise Exception("No de la misma longitud")
  
     size = len(state)
 
@@ -30,13 +30,13 @@ def add_round_key(state, round_key):
     return arr
 
 def pro_matrix2bytes(matrix):
-    """ Converts a 4x4 matrix into a 16-byte array. (Robin Jadoul) """
+    """Convierte una matriz de 4x4 en una matriz de 16 bytes. (Robin Jadoul)  """
     return bytes(sum(matrix, []))
 
-# Add round key operation to matrices
+# Agregar operación de tecla redonda a matrices
 matrix = add_round_key(state, round_key)
 print(matrix)
 
-# Retrieve flag with pro implementation
+# Recuperar bandera con implementación pro
 flag = pro_matrix2bytes(matrix)
 print(flag.decode("utf-8"))
