@@ -10,8 +10,8 @@ def get_auth_route(token):
 
 # Generate token
 token = jwt.encode({"username": "user", "admin": True}, SECRET_KEY, algorithm="HS256")
-token = token.decode("utf-8")
-print(token)
+#token = token.decode("utf-8")
+#print(token)
 
 r = requests.get(get_auth_route(token))
 print(r.content.decode("utf-8"))
